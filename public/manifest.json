@@ -1,0 +1,10 @@
+{
+  "name": "Putt Calculator",
+  "short_name": "Putt Calc",
+  "description": "Golf simulator putting calculator",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#171717",
+  "orientation": "portrait-primary"
+}
