@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function SignInPage() {
+function SignInForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
@@ -91,6 +91,29 @@ export default function SignInPage() {
 				>
 					← Back
 				</Link>
+			</div>
+		</main>
+	);
+}
+
+export default function SignInPage() {
+	return (
+		<Suspense fallback={<SignInFallback />}>
+			<SignInForm />
+		</Suspense>
+	);
+}
+
+function SignInFallback() {
+	return (
+		<main className="min-h-screen p-4 md:p-6 flex flex-col items-center justify-center">
+			<div className="w-full max-w-sm">
+				<h1 className="text-2xl font-bold mb-4">Sign in</h1>
+				<div className="space-y-4 animate-pulse">
+					<div className="h-10 rounded-lg bg-neutral-200" />
+					<div className="h-10 rounded-lg bg-neutral-200" />
+					<div className="h-10 rounded-lg bg-neutral-800" />
+				</div>
 			</div>
 		</main>
 	);
