@@ -43,6 +43,7 @@ export async function POST(request: Request) {
 			const count = await prisma.puttHistory.count({
 				where: { userId: session.user.id }
 			});
+
 			if (count > HISTORY_CAP) {
 				const oldest = await prisma.puttHistory.findMany({
 					where: { userId: session.user.id },
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
 				}
 			}
 		}
+
 		return NextResponse.json({
 			putts,
 			makePctUsed: Math.round(makePctUsed * 100) / 100
