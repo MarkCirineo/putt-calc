@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -25,18 +26,28 @@ export async function PUT(request: Request) {
 		const body = await request.json();
 		const handicapPreset = body?.handicapPreset as number | null | undefined;
 		const customPercentages = body?.customPercentages;
-		const data: { handicapPreset?: number | null; customPercentages?: unknown } = {};
+
+		const data: {
+			handicapPreset?: number | null;
+			customPercentages?: Prisma.InputJsonValue;
+		} = {};
+
 		if (handicapPreset !== undefined) {
 			const n = Number(handicapPreset);
 			data.handicapPreset =
 				Number.isInteger(n) && [0, 5, 10, 15, 20, 25].includes(n) ? n : null;
 		}
-		if (customPercentages !== undefined) data.customPercentages = customPercentages;
+
+		if (customPercentages !== undefined) {
+			data.customPercentages = customPercentages as Prisma.InputJsonValue;
+		}
+
 		await prisma.userPuttSettings.upsert({
 			where: { userId: session.user.id },
 			create: { userId: session.user.id, ...data },
 			update: data
 		});
+
 		return NextResponse.json({ ok: true });
 	} catch (e) {
 		console.error("settings put error", e);

@@ -14,7 +14,7 @@ export default function Home() {
 	const { data: session, status } = useSession();
 	const [preset, setPreset] = useState<HandicapPreset>(10);
 	const [customMode, setCustomMode] = useState(false);
-	const [result, setResult] = useState<{ putts: 1 | 2 | 3 | 4; makePctUsed?: number } | null>(
+	const [result, setResult] = useState<{ putts: 1 | 2 | 3 | 4; } | null>(
 		null
 	);
 	const [loading, setLoading] = useState(false);
@@ -76,7 +76,7 @@ export default function Home() {
 				});
 				const data = await res.json();
 				if (!res.ok) throw new Error(data?.error ?? "Request failed");
-				setResult({ putts: data.putts, makePctUsed: data.makePctUsed });
+				setResult({ putts: data.putts });
 				if (session?.user) setHistoryRefresh((n) => n + 1);
 			} catch (e) {
 				console.error(e);
@@ -152,7 +152,6 @@ export default function Home() {
 					<DistanceInput onSubmit={handleCalculate} disabled={loading} />
 					<ResultDisplay
 						putts={result?.putts ?? null}
-						makePctUsed={result?.makePctUsed}
 					/>
 				</section>
 
